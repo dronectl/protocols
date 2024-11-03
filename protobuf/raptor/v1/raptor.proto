@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+import "raptor/v1/battery.proto";
+import "raptor/v1/bldc.proto";
+import "raptor/v1/env.proto";
+import "raptor/v1/metadata.proto";
+import "raptor/v1/relay.proto";
+
+message RaptorAliveData {
+  optional Metadata metadata = 1;
+  optional EnvironmentMeasurements env = 2;
+}
+
+message RaptorPower {
+  optional BatteryMeasurements battery = 1;
+  optional Relays relays = 2;
+}
+
+message RaptorHighSpeed {
+  optional BLDCMeasurements bldc = 1;
+}

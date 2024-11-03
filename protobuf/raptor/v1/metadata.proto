@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+enum SystemStatus {
+  SYSTEM_STATUS_UNSPECIFIED = 0;
+  SYSTEM_STATUS_IDLE = 1;
+  SYSTEM_STATUS_ARMED = 2;
+  SYSTEM_STATUS_ACTIVE = 3;
+  SYSTEM_STATUS_INERROR = 4;
+}
+
+message Metadata {
+  optional int32 fw_version = 1;
+  optional int32 hw_version = 2;
+  optional SystemStatus status = 3;
+}

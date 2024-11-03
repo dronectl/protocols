@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+message Relays {
+  enum RelayState {
+    RELAY_STATE_UNSPECIFIED = 0;
+    RELAY_STATE_OPENED = 1;
+    RELAY_STATE_CLOSED = 2;
+  }
+
+  optional RelayState esc_power = 1;
+  optional RelayState battery_power = 2;
+  optional RelayState ext_power = 3;
+}

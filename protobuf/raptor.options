@@ -1,6 +1,0 @@
-
-BLDCChannel.current          max_count:10
-BLDCChannel.voltage          max_count:10
-BLDCChannel.load_cell_1_force     max_count:10
-BLDCChannel.load_cell_2_force     max_count:10
-BLDCChannel.load_cell_3_force     max_count:10

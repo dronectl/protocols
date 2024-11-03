@@ -1,0 +1,5 @@
+BLDCChannel.current max_count:50
+BLDCChannel.voltage max_count:50
+BLDCChannel.load_cell_1_force max_count:50
+BLDCChannel.load_cell_2_force max_count:50
+BLDCChannel.load_cell_3_force max_count:50
