@@ -11,6 +11,10 @@ message BatteryMeasurements {
   }
 
   optional float state_of_charge = 1;
+
+
+
+  
   optional BatteryState state = 2;
   optional float voltage = 3;
   optional float current = 4;
