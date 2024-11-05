@@ -10,8 +10,8 @@ message BatteryMeasurements {
     BATTERY_STATE_DISCHARGING = 3;
   }
 
-  optional BatteryState state = 1;
-  optional float state_of_charge = 2;
+  optional float state_of_charge = 1;
+  optional BatteryState state = 2;
   optional float voltage = 3;
   optional float current = 4;
 }
