@@ -36,5 +36,5 @@ jobs:
       - name: run buf format
         run: buf format -d --exit-code
       - name: run buf breaking change detection against master
-        run: buf breaking --against .git#branch=master
+        run: buf breaking --against ${{ github.server_url }}/${{ github.repository }}.git#branch=master
 
