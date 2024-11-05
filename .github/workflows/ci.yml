@@ -13,6 +13,10 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     name: protobuf compile (nanopb)
@@ -31,6 +35,7 @@ jobs:
         uses: bufbuild/buf-action@v1
         with:
           setup_only: true
+          pr_comment: true
       - name: run buf lint
         run: buf lint
       - name: run buf format
