@@ -13,23 +13,21 @@ on:
     branches:
       - master
 
-# jobs:
-#   build:
-#     name: protobuf compile (nanopb)
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: checkout source
-#       uses: actions/checkout@v4
-#     - name: install protoc 
-#     - name: compile protobuf headers 
+jobs:
+  build:
+    name: protobuf compile (nanopb)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-#   lint:
-#     name: protobuf lint
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: checkout source
-#       uses: actions/checkout@v4
-#     - name: install buf cli
-#     - name: run buf lint
+  lint:
+    name: protobuf lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-action@v1
+        with:
+          input: "protobuf"
+          lint: ${{ github.event_name == 'push' }}
 
 
