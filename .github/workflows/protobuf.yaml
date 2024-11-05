@@ -22,13 +22,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-    name: protobuf compile (nanopb)
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout source
-        uses: actions/checkout@v4
-  protobuf_static_analysis:
+  static-analysis:
     name: protobuf static analysis
     runs-on: ubuntu-latest
     steps:
@@ -41,3 +35,21 @@ jobs:
           lint: true
           format: true
           breaking: true
+  build:
+    name: protobuf code generation
+    runs-on: ubuntu-latest
+    needs: static-analysis
+    steps:
+      - name: checkout source
+        uses: actions/checkout@v4
+      - name: setup buf environment
+        uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - run: buf generate
+      - name: archive autogen code 
+        uses: actions/upload-artifact@v4
+        with:
+          name: raptor_pb
+          path: gen
+          retention-days: 5
