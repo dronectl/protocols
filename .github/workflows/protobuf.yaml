@@ -1,13 +1,15 @@
 ---
-name: protocols
+name: protobuf 
 on:
   push:
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
-      - "docs/**"
-    branches:
-      - master
+    paths:
+      - '**.proto'
+      - '**.options'
+      - '**/buf.yaml'
+      - '**/buf.lock'
+      - '**/buf.md'
+      - '**/README.md'
+      - '**/LICENSE'
   pull_request:
     types: [opened, reopened, synchronize]
     branches:
@@ -24,8 +26,7 @@ jobs:
     steps:
       - name: checkout source
         uses: actions/checkout@v4
-
-  static_analysis:
+  protobuf_static_analysis:
     name: protobuf static analysis
     runs-on: ubuntu-latest
     steps:
@@ -34,12 +35,7 @@ jobs:
       - name: setup buf environment
         uses: bufbuild/buf-action@v1
         with:
-          setup_only: true
-          pr_comment: true
-      - name: run buf lint
-        run: buf lint
-      - name: run buf format
-        run: buf format -d --exit-code
-      - name: run buf breaking change detection against master
-        run: buf breaking --against ${{ github.server_url }}/${{ github.repository }}.git#branch=master
-
+          breaking-against: "${{ github.server_url }}/${{ github.repository }}.git#branch=master,ref=HEAD~1"
+          lint: ${{ github.event_name == 'push' }}
+          format: ${{ github.event_name == 'push' }}
+          breaking: ${{ github.event_name == 'push' }}
