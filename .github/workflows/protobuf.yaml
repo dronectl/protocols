@@ -10,6 +10,8 @@ on:
       - '**/buf.md'
       - '**/README.md'
       - '**/LICENSE'
+    branches:
+      - master
   pull_request:
     types: [opened, reopened, synchronize]
     branches:
@@ -35,7 +37,7 @@ jobs:
       - name: setup buf environment
         uses: bufbuild/buf-action@v1
         with:
-          breaking-against: "${{ github.server_url }}/${{ github.repository }}.git#branch=master,ref=HEAD~1"
-          lint: ${{ github.event_name == 'push' }}
-          format: ${{ github.event_name == 'push' }}
-          breaking: ${{ github.event_name == 'push' }}
+          breaking_against: "${{ github.server_url }}/${{ github.repository }}.git#branch=master,ref=HEAD~1"
+          lint: true
+          format: true
+          breaking: true
