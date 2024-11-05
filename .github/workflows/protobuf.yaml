@@ -1,5 +1,5 @@
 ---
-name: protobuf 
+name: protobuf ci 
 on:
   push:
     paths:
