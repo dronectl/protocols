@@ -4,7 +4,7 @@ package raptor.v1;
 
 message BatteryMeasurements {
   enum BatteryState {
-    BATTERY_STATE_UNSPECIFIED = 0;
+    BATTERY_STATE_UNSPECIFIED = 0
     BATTERY_STATE_IDLE = 1;
     BATTERY_STATE_CHARGING = 2;
     BATTERY_STATE_DISCHARGING = 3;
