@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+enum CommandStatus {
+  COMMAND_STATUS_UNSPECIFIED = 0;
+  COMMAND_STATUS_OK = 1;
+  COMMAND_STATUS_GEN_ERR = 2;
+  COMMAND_STATUS_UNKNOWN_COMMAND_ERR = 3;
+  COMMAND_STATUS_DECODE_ERR = 4;
+}
+
+message GetVersionRequest {}
+
+message GetVersionResponse {
+  string firmware_version = 1;
+  string hardware_version = 2;
+}
+
+message CommandRequest {
+  oneof request_mux {
+    GetVersionRequest get_version = 1;
+  }
+}
+
+message CommandResponse {
+  CommandStatus status = 1;
+  oneof response_mux {
+    GetVersionResponse get_version = 2;
+  }
+}
+
+service CommandService {
+  rpc Command(CommandRequest) returns (CommandResponse);
+}
