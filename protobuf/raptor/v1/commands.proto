@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package raptor.v1;
 
+import "raptor/v1/battery.proto";
+import "raptor/v1/env.proto";
+import "raptor/v1/relay.proto";
+import "raptor/v1/system.proto";
+
 enum CommandStatus {
   COMMAND_STATUS_UNSPECIFIED = 0;
   COMMAND_STATUS_OK = 1;
@@ -13,9 +18,7 @@ enum CommandStatus {
 message DiscoveryRequest {}
 
 message DiscoveryResponse {
-  int32 uuid = 1;
-  string firmware_version = 2;
-  string hardware_version = 3;
+  SystemMetadata metadata = 1;
 }
 
 message GetVersionRequest {}
@@ -25,11 +28,37 @@ message GetVersionResponse {
   string hardware_version = 2;
 }
 
+message GetAliveDataRequest {}
+
+message GetAliveDataResponse {
+  SystemStatus status = 1;
+  Relays relays = 2;
+  EnvironmentMeasurements env = 3;
+  BatteryMeasurements battery = 4;
+}
+
+enum StreamControl {
+  STREAM_CONTROL_UNSPECIFIED = 0;
+  STREAM_CONTROL_START = 1;
+  STREAM_CONTROL_SYNC = 2;
+  STREAM_CONTROL_STOP = 3;
+}
+
+message StreamControlRequest {
+  StreamControl control = 1;
+}
+
+message StreamControlResponse {
+  uint32 sync_timestamp = 1;
+}
+
 message CommandRequest {
   int32 uuid = 1;
   oneof request_mux {
     DiscoveryRequest discovery = 2;
     GetVersionRequest get_version = 3;
+    GetAliveDataRequest get_alive_data = 4;
+    StreamControlRequest stream_control = 5;
   }
 }
 
@@ -38,5 +67,7 @@ message CommandResponse {
   oneof response_mux {
     DiscoveryResponse discovery = 2;
     GetVersionResponse get_version = 3;
+    GetAliveDataResponse get_alive_data = 4;
+    StreamControlResponse stream_control = 5;
   }
 }
