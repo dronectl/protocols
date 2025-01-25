@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+
+message StreamHeader {
+  uint32 sequence = 1; // stream transmission sequence number
+  uint32 payload_size = 2; // size of payload in bytes
+  uint32 crc32 = 3; // crc32 checksum
+}
+
+message ChannelMetadata {
+  uint32 timestamp = 1; // timestamp of first sample
+  uint32 sample_frequency = 2; // sample frequency in Hz
+}
+
+// channel groupings are based on sample speed
+
+message Channel1 {
+  ChannelMetadata meta = 1;
+  repeated float current = 2; // A
+  repeated float voltage = 3; // V
+}
+
+message Channel2 {
+  ChannelMetadata meta = 1;
+  repeated float torque = 2; // N
+  repeated float thrust = 3; // N
+  repeated float rpm = 4; // rpm
+}
+
+message StreamData {
+  StreamHeader header = 1;
+  Channel1 channel1 = 2;
+  Channel2 channel2 = 3;
+}

@@ -1,0 +1,5 @@
+float current max_count:50
+float voltage max_count:50
+float torque max_count:50
+float thrust max_count:50
+float rpm max_count:50
