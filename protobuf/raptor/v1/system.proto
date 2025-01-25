@@ -10,8 +10,8 @@ enum SystemStatus {
   SYSTEM_STATUS_INERROR = 4;
 }
 
-message Metadata {
-  optional int32 fw_version = 1;
-  optional int32 hw_version = 2;
-  optional SystemStatus status = 3;
+message SystemMetadata {
+  int32 uuid = 1;
+  string firmware_version = 2;
+  string hardware_version = 3;
 }
