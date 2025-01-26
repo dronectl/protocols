@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package raptor.v1;
+
+enum ProfileWaveform {
+  PROFILE_CONTROL_MODE_UNSPECIFIED = 0;
+  PROFILE_CONTROL_MODE_SEQUENCE = 1;
+  PROFILE_CONTROL_MODE_SINE = 2;
+}
+
+message ProfileSequence {
+  uint32 iterations = 1; // sequence repetitions
+  repeated uint32 throttle = 2; //
+  repeated uint32 duration = 3; // duration of step in (ms)
+  repeated uint32 slew = 4; // rate of change for target step (%/ms)
+}
+
+message ProfileSine {
+  uint32 duration = 1;
+  uint32 amplitude = 2; // waveform amplitude (%)
+  uint32 frequency = 3; // waveform frequency (Hz)
+}
+
+message Tripzone {
+  float min = 1;
+  float max = 2;
+}
+
+message ProfileTripzones {
+  float max_voltage = 1; // (V)
+  float max_current = 2; // (A)
+  float max_bldc_temperature = 3; // (˚C)
+  float max_esc_temperature = 4; // (˚C)
+  float max_battery_temperature = 5; // (˚C)
+}
+
+message ProfileData {
+  uint32 profile_id = 1;
+  ProfileTripzones tripzones = 2;
+  oneof profile_type {
+    ProfileSine sine = 3;
+    ProfileSequence sequence = 4;
+  }
+}
