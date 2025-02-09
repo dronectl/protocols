@@ -36,15 +36,15 @@ message DeviceMetadataResponse {
   DeviceMetadata device = 1;
 }
 
-message DeviceAliveDataRequest {}
-message DeviceAliveDataResponse {
-  DeviceAliveData alive_data = 1;
+message DeviceAliveTelemetryRequest {}
+message DeviceAliveTelemetryResponse {
+  DeviceAliveTelemetry alive = 1;
 }
 
 // Relay control
 message RelayControlRequest {
   RelayId id = 1;
-  RelayState state = 2;
+  RelayCommand command = 2;
 }
 message RelayControlResponse {}
 
@@ -99,7 +99,7 @@ message CommandBaseRequest {
   oneof request_mux {
     DiscoveryRequest discovery = 2;
     DeviceMetadataRequest device_metadata = 3;
-    DeviceAliveDataRequest alive_data = 4;
+    DeviceAliveTelemetryRequest alive = 4;
     StreamControlRequest stream_control = 5;
     RelayControlRequest relay_control = 6;
   }
@@ -112,7 +112,7 @@ message CommandBaseResponse {
   oneof response_mux {
     DiscoveryResponse discovery = 2;
     DeviceMetadataResponse device_metadata = 3;
-    DeviceAliveDataResponse alive_data = 4;
+    DeviceAliveTelemetryResponse alive = 4;
     StreamControlResponse stream_control = 5;
     RelayControlResponse relay_control = 6;
   }
