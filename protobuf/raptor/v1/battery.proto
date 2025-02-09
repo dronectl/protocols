@@ -13,12 +13,14 @@ enum BatteryState {
 }
 
 message BatteryTelemetry {
+  // battery precense flag
+  bool precense = 1;
   // battery state
-  BatteryState state = 1;
+  BatteryState state = 2;
   // battery state of charge (%)
-  float soc = 2;
+  float soc = 3;
   // battery voltage (V)
-  float voltage = 3;
+  float voltage = 4;
   // battery current (A)
-  float current = 4;
+  float current = 5;
 }
