@@ -47,7 +47,7 @@ message Channel2 {
  **/
 message StreamData {
   StreamHeader header = 1;
-  ConditionsData conditions = 2;
+  EnvironmentTelemetry environment = 2;
   Channel1 channel1 = 3;
   Channel2 channel2 = 4;
 }
