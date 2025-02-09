@@ -3,71 +3,96 @@ syntax = "proto3";
 package raptor.v1;
 
 import "raptor/v1/battery.proto";
+import "raptor/v1/device.proto";
 import "raptor/v1/env.proto";
+import "raptor/v1/registers.proto";
 import "raptor/v1/relay.proto";
-import "raptor/v1/system.proto";
 
 enum CommandStatus {
+  // reserved
   COMMAND_STATUS_UNSPECIFIED = 0;
+
   COMMAND_STATUS_OK = 1;
   COMMAND_STATUS_GEN_ERR = 2;
   COMMAND_STATUS_UNKNOWN_COMMAND_ERR = 3;
   COMMAND_STATUS_DECODE_ERR = 4;
 }
 
+// UDP broadcast device discovery command
 message DiscoveryRequest {}
-
 message DiscoveryResponse {
-  SystemMetadata metadata = 1;
+  DeviceMetadata device = 1;
 }
 
-message GetVersionRequest {}
+// Device reset command
+message ResetRequest {}
+message ResetResponse {}
 
-message GetVersionResponse {
-  string firmware_version = 1;
-  string hardware_version = 2;
+// Device metadata
+message DeviceMetadataRequest {}
+message DeviceMetadataResponse {
+  DeviceMetadata device = 1;
 }
 
-message GetAliveDataRequest {}
-
-message GetAliveDataResponse {
-  SystemStatus status = 1;
-  Relays relays = 2;
-  EnvironmentMeasurements env = 3;
-  BatteryMeasurements battery = 4;
+// Device alive data
+message AliveDataRequest {}
+message AliveDataResponse {
+  DeviceStatus status = 1;
+  RelayTelemetry relays = 2;
+  EnvironmentTelemetry env = 3;
+  BatteryTelemetry battery = 4;
 }
 
-enum StreamControl {
-  STREAM_CONTROL_UNSPECIFIED = 0;
-  STREAM_CONTROL_START = 1;
-  STREAM_CONTROL_SYNC = 2;
-  STREAM_CONTROL_STOP = 3;
+// Relay control
+message RelayControlRequest {
+  RelayId id = 1;
+  RelayState state = 2;
+}
+message RelayControlResponse {}
+
+// Register API
+message RegisterWriteRequest {
+  RegisterId id = 1;
+  sint64 value = 2;
+}
+message RegisterWriteResponse {}
+message RegisterReadRequest {
+  RegisterId id = 1;
+}
+message RegisterReadResponse {
+  RegisterId id = 1;
+  sint64 value = 2;
 }
 
 message StreamControlRequest {
   StreamControl control = 1;
 }
-
 message StreamControlResponse {
   uint32 sync_timestamp = 1;
 }
 
-message CommandRequest {
-  int32 uuid = 1;
+message CommandBaseRequest {
+  // destination device uuid
+  uint32 uuid = 1;
+  // request message multiplexor
   oneof request_mux {
     DiscoveryRequest discovery = 2;
-    GetVersionRequest get_version = 3;
-    GetAliveDataRequest get_alive_data = 4;
+    DeviceMetadataRequest device_metadata = 3;
+    AliveDataRequest alive_data = 4;
     StreamControlRequest stream_control = 5;
+    RelayControlRequest relay_control = 6;
   }
 }
 
-message CommandResponse {
+message CommandBaseResponse {
+  // command response code
   CommandStatus status = 1;
+  // response message multiplexor
   oneof response_mux {
     DiscoveryResponse discovery = 2;
-    GetVersionResponse get_version = 3;
-    GetAliveDataResponse get_alive_data = 4;
+    DeviceMetadataResponse device_metadata = 3;
+    AliveDataResponse alive_data = 4;
     StreamControlResponse stream_control = 5;
+    RelayControlResponse relay_control = 6;
   }
 }

@@ -4,6 +4,13 @@ package raptor.v1;
 
 import "raptor/v1/env.proto";
 
+enum StreamControl {
+  STREAM_CONTROL_UNSPECIFIED = 0;
+  STREAM_CONTROL_START = 1;
+  STREAM_CONTROL_SYNC = 2;
+  STREAM_CONTROL_STOP = 3;
+}
+
 message StreamHeader {
   uint32 profile_id = 1; // active profile id
   uint32 sequence = 2; // stream transmission sequence number
