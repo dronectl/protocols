@@ -5,8 +5,10 @@ package raptor.v1;
 import "raptor/v1/battery.proto";
 import "raptor/v1/device.proto";
 import "raptor/v1/env.proto";
+import "raptor/v1/profile.proto";
 import "raptor/v1/registers.proto";
 import "raptor/v1/relay.proto";
+import "raptor/v1/stream.proto";
 
 enum CommandStatus {
   // reserved
@@ -28,19 +30,15 @@ message DiscoveryResponse {
 message ResetRequest {}
 message ResetResponse {}
 
-// Device metadata
+// Device APIs
 message DeviceMetadataRequest {}
 message DeviceMetadataResponse {
   DeviceMetadata device = 1;
 }
 
-// Device alive data
-message AliveDataRequest {}
-message AliveDataResponse {
-  DeviceStatus status = 1;
-  RelayTelemetry relays = 2;
-  EnvironmentTelemetry env = 3;
-  BatteryTelemetry battery = 4;
+message DeviceAliveDataRequest {}
+message DeviceAliveDataResponse {
+  DeviceAliveData alive_data = 1;
 }
 
 // Relay control
@@ -49,6 +47,28 @@ message RelayControlRequest {
   RelayState state = 2;
 }
 message RelayControlResponse {}
+
+// Profile API
+message ProfileLoadRequest {
+  ProfilePayload profile = 1;
+}
+message ProfileLoadResponse {
+  uint32 id = 1;
+}
+
+message ProfileStartRequest {}
+message ProfileStartResponse {
+  uint32 id = 1;
+}
+
+message ProfileStopRequest {}
+message ProfileStopResponse {
+  uint32 id = 1;
+}
+
+// Emergency stop
+message EmergencyStopRequest {}
+message EmergencyStopResponse {}
 
 // Register API
 message RegisterWriteRequest {
@@ -64,6 +84,7 @@ message RegisterReadResponse {
   sint64 value = 2;
 }
 
+// Streaming API
 message StreamControlRequest {
   StreamControl control = 1;
 }
@@ -78,7 +99,7 @@ message CommandBaseRequest {
   oneof request_mux {
     DiscoveryRequest discovery = 2;
     DeviceMetadataRequest device_metadata = 3;
-    AliveDataRequest alive_data = 4;
+    DeviceAliveDataRequest alive_data = 4;
     StreamControlRequest stream_control = 5;
     RelayControlRequest relay_control = 6;
   }
@@ -91,7 +112,7 @@ message CommandBaseResponse {
   oneof response_mux {
     DiscoveryResponse discovery = 2;
     DeviceMetadataResponse device_metadata = 3;
-    AliveDataResponse alive_data = 4;
+    DeviceAliveDataResponse alive_data = 4;
     StreamControlResponse stream_control = 5;
     RelayControlResponse relay_control = 6;
   }
