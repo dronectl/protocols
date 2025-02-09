@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package raptor.v1;
 
-import "raptor/v1/battery.proto";
 import "raptor/v1/device.proto";
-import "raptor/v1/env.proto";
 import "raptor/v1/profile.proto";
 import "raptor/v1/registers.proto";
 import "raptor/v1/relay.proto";
