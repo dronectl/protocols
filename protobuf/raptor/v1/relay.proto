@@ -24,6 +24,15 @@ enum RelayState {
   RELAY_STATE_CLOSED = 2;
 }
 
+// relay commands
+enum RelayCommand {
+  // reserved
+  RELAY_COMMAND_UNSPECIFIED = 0;
+
+  RELAY_COMMAND_OPEN = 1;
+  RELAY_COMMAND_CLOSE = 2;
+}
+
 message RelayTelemetry {
   // array of relay states indexed by RelayId
   repeated RelayState relay_states = 1;
