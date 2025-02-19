@@ -6,112 +6,59 @@ import "raptor/v1/device.proto";
 import "raptor/v1/profile.proto";
 import "raptor/v1/registers.proto";
 import "raptor/v1/relay.proto";
-import "raptor/v1/stream.proto";
 
-enum CommandStatus {
-  // reserved
-  COMMAND_STATUS_UNSPECIFIED = 0;
+/***************** User Command API *****************/
 
-  COMMAND_STATUS_OK = 1;
-  COMMAND_STATUS_GEN_ERR = 2;
-  COMMAND_STATUS_UNKNOWN_COMMAND_ERR = 3;
-  COMMAND_STATUS_DECODE_ERR = 4;
-}
-
-// UDP broadcast device discovery command
-message DiscoveryRequest {}
-message DiscoveryResponse {
-  DeviceMetadata device = 1;
-}
-
-// Device reset command
-message ResetRequest {}
-message ResetResponse {}
-
-// Device APIs
-message DeviceMetadataRequest {}
-message DeviceMetadataResponse {
-  DeviceMetadata device = 1;
-}
-
-message DeviceAliveTelemetryRequest {}
-message DeviceAliveTelemetryResponse {
-  DeviceAliveTelemetry alive = 1;
-}
-
-// Relay control
-message RelayControlRequest {
-  RelayId id = 1;
-  RelayCommand command = 2;
-}
-message RelayControlResponse {}
-
-// Profile API
-message ProfileLoadRequest {
-  ProfilePayload profile = 1;
-}
-message ProfileLoadResponse {
-  uint32 id = 1;
-}
-
-message ProfileStartRequest {}
-message ProfileStartResponse {
-  uint32 id = 1;
-}
-
-message ProfileStopRequest {}
-message ProfileStopResponse {
-  uint32 id = 1;
-}
-
-// Emergency stop
-message EmergencyStopRequest {}
-message EmergencyStopResponse {}
-
-// Register API
-message RegisterWriteRequest {
-  RegisterId id = 1;
-  sint64 value = 2;
-}
-message RegisterWriteResponse {}
-message RegisterReadRequest {
-  RegisterId id = 1;
-}
-message RegisterReadResponse {
-  RegisterId id = 1;
-  sint64 value = 2;
-}
-
-// Streaming API
-message StreamControlRequest {
-  StreamControl control = 1;
-}
-message StreamControlResponse {
-  uint32 sync_timestamp = 1;
-}
-
-message CommandBaseRequest {
-  // destination device uuid
-  uint32 uuid = 1;
+message UserRequest {
   // request message multiplexor
   oneof request_mux {
-    DiscoveryRequest discovery = 2;
-    DeviceMetadataRequest device_metadata = 3;
-    DeviceAliveTelemetryRequest alive = 4;
-    StreamControlRequest stream_control = 5;
-    RelayControlRequest relay_control = 6;
+    DeviceMetadataRequest device_metadata = 1;
+    DeviceAliveTelemetryRequest alive = 2;
+    DeviceResetResponse reset = 3;
+    DeviceEstopRequest estop = 4;
   }
 }
 
-message CommandBaseResponse {
-  // command response code
-  CommandStatus status = 1;
+message UserResponse {
   // response message multiplexor
   oneof response_mux {
-    DiscoveryResponse discovery = 2;
-    DeviceMetadataResponse device_metadata = 3;
-    DeviceAliveTelemetryResponse alive = 4;
-    StreamControlResponse stream_control = 5;
-    RelayControlResponse relay_control = 6;
+    DeviceMetadataResponse device_metadata = 1;
+    DeviceAliveTelemetryResponse alive = 2;
+    DeviceResetResponse reset = 3;
+    DeviceEstopResponse estop = 4;
+  }
+}
+
+/***************** Root Command API *****************/
+
+enum RootStatus {
+  // reserved
+  ROOT_STATUS_UNSPECIFIED = 0;
+
+  // authenticated
+  ROOT_STATUS_OK = 1;
+  // unauthorized; verify root key
+  ROOT_STATUS_UNAUTHORIZED = 2;
+}
+
+message RootRequest {
+  // root authentication key
+  uint32 key = 1;
+  // request message multiplexor
+  oneof request_mux {
+    RelayControlRequest relay_control = 2;
+    RegisterReadRequest register_read = 3;
+    RegisterWriteRequest register_write = 4;
+    RegisterNvmRequest register_nvm = 5;
+  }
+}
+
+message RootResponse {
+  // response message multiplexor
+  oneof response_mux {
+    RelayControlResponse relay_control = 1;
+    RegisterReadResponse register_read = 2;
+    RegisterWriteResponse register_write = 3;
+    RegisterNvmResponse register_nvm = 4;
   }
 }
