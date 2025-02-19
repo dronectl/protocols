@@ -10,7 +10,8 @@ syntax = "proto3";
 package raptor.v1;
 
 import "raptor/v1/commands.proto";
-import "raptor/v1/devices.proto";
+import "raptor/v1/device.proto";
+import "raptor/v1/signals.proto";
 
 // UHCI protocol port constants
 enum UHCIPort {
@@ -152,9 +153,9 @@ message UHCIBaseRequest {
     // uhci protocol request
     UHCIProtocolRequest uhci = 2;
     // elevated request
-    CommandRootRequest root = 3;
+    RootRequest root = 3;
     // user space request
-    CommandUserRequest user = 4;
+    UserRequest user = 4;
   }
 }
 
@@ -166,8 +167,8 @@ message UHCIBaseResponse {
     // uhci protocol request response
     UHCIProtocolResponse uhci = 2;
     // elevated request response
-    CommandRootResponse root = 3;
+    RootResponse root = 3;
     // user space request response
-    CommandUserResponse user = 4;
+    UserResponse user = 4;
   }
 }
