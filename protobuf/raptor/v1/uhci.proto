@@ -1,0 +1,173 @@
+/**
+ * UHCI Protocol Schema Specification
+ * ----------------------------------
+ *
+ * Copyright © 2025 dronectl
+ */
+
+syntax = "proto3";
+
+package raptor.v1;
+
+import "raptor/v1/commands.proto";
+import "raptor/v1/devices.proto";
+
+// UHCI protocol port constants
+enum UHCIPort {
+  // reserved
+  UHCI_PORT_UNSPECIFIED = 0;
+
+  UHCI_PORT_COMMAND = 4000;
+  UHCI_PORT_DISCOVERY = 7001;
+}
+
+enum UHCIStatus {
+  // reserved
+  UHCI_STATUS_UNSPECIFIED = 0;
+
+  UHCI_STATUS_OK = 1;
+  UHCI_STATUS_NOT_FOUND = 2;
+  UHCI_STATUS_DECODE_ERR = 3;
+  // DDOS protection rate limit exceeded
+  UHCI_STATUS_RATE_LIMIT = 4;
+}
+
+/***************** Streaming API *****************/
+
+message UHCIStreamHeader {
+  // active profile id
+  uint32 profile_id = 1;
+  // unique stream key
+  uint32 stream_key = 2;
+  // stream transmission sequence number
+  uint32 sequence = 3;
+  // size of payload in bytes
+  uint32 payload_size = 4;
+  // crc32 checksum
+  uint32 crc32 = 5;
+}
+
+message UHCIStreamData {
+  // stream header
+  UHCIStreamHeader header = 1;
+  // signal id
+  SignalId id = 2;
+  // epoch timestamp of first sample (ms)
+  uint32 timestamp = 3;
+  // sample frequency (Hz)
+  uint32 sample_frequency = 4;
+  // measurements
+  repeated float buffer = 5;
+}
+
+/***************** UHCI Request/Response API *****************/
+
+// May not be needed but proof of principle that we can define specific error codes a specific request
+enum UHCIStreamStatus {
+  // reserved
+  UHCI_STREAM_STATUS_UNSPECIFIED = 0;
+
+  UHCI_STREAM_STATUS_OK = 1;
+  // session is currently active; shutdown before reinitializing
+  UHCI_STREAM_STATUS_INIT_SESSION_ACTIVE = 2;
+  // stream initialization parameters are invalid
+  UHCI_STREAM_STATUS_INIT_INVALID = 3;
+  // requested retransmission frame is not found in cache
+  UHCI_STREAM_STATUS_RTX_RESOURCE_NOT_FOUND = 4;
+}
+
+message UHCIStreamInitRequest {
+  // stream endpoint ip address
+  string ip_address = 1;
+  // stream endpoint port number
+  uint32 port = 2;
+  // stream key is client generated and is used to authenticate inbound stream payloads
+  uint32 stream_key = 3;
+}
+
+message UHCIStreamInitResponse {
+  UHCIStreamStatus status = 1;
+}
+
+message UHCIStreamStartRequest {}
+
+message UHCIStreamStartResponse {
+  // stream response status
+  UHCIStreamStatus status = 1;
+}
+
+message UHCIStreamStopRequest {}
+
+message UHCIStreamStopResponse {
+  // stream response status
+  UHCIStreamStatus status = 1;
+}
+
+message UHCIStreamRetransmitRequest {
+  // packet sequence number
+  uint32 sequence = 1;
+}
+
+message UHCIStreamRetransmitResponse {
+  // stream response status
+  UHCIStreamStatus status = 1;
+}
+
+message UHCIDiscoveryRequest {}
+
+message UHCIDiscoveryResponse {
+  // TODO: define generic uhci device metadata
+  DeviceMetadata device = 1;
+}
+
+message UHCIProtocolRequest {
+  // request message multiplexor
+  oneof request_mux {
+    UHCIDiscoveryRequest discovery = 1;
+    UHCIStreamInitRequest stream_init = 2;
+    UHCIStreamStartRequest stream_start = 3;
+    UHCIStreamRetransmitRequest stream_rtx = 4;
+    UHCIStreamStopRequest stream_stop = 5;
+  }
+}
+
+message UHCIProtocolResponse {
+  // response message multiplexor
+  oneof response_mux {
+    UHCIDiscoveryResponse discovery = 1;
+    UHCIStreamInitResponse stream_init = 2;
+    UHCIStreamStartResponse stream_start = 3;
+    UHCIStreamRetransmitResponse stream_rtx = 4;
+    UHCIStreamStopResponse stream_stop = 5;
+  }
+}
+
+/***************** Base Request/Response API *****************/
+
+message UHCIBaseRequest {
+  // destination device uuid
+  uint32 uuid = 1;
+  // request message multiplexor
+  oneof request_mux {
+    // uhci protocol request
+    UHCIProtocolRequest uhci = 2;
+    // elevated request
+    CommandRootRequest root = 3;
+    // user space request
+    CommandUserRequest user = 4;
+  }
+}
+
+message UHCIBaseResponse {
+  // response code
+  UHCIStatus status = 1;
+  // response message multiplexor
+  oneof response_mux {
+    // uhci protocol request response
+    UHCIProtocolResponse uhci = 2;
+    // elevated request response
+    CommandRootResponse root = 3;
+    // user space request response
+    CommandUserResponse user = 4;
+  }
+}
