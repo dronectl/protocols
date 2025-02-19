@@ -25,6 +25,18 @@ message RegisterReadResponse {
   sint64 value = 2;
 }
 
-message RegisterNvmRequest {}
+enum RegisterNvmAction {
+  // reserved
+  REGISTER_NVM_ACTION_UNSPECIFIED = 0;
+
+  // flash in-memory registers to NVM
+  REGISTER_NVM_ACTION_SAVE = 1;
+  // load registers from NVM to in-memory registers. This will overwrite any existing in-memory registers
+  REGISTER_NVM_ACTION_LOAD = 2;
+}
+
+message RegisterNvmRequest {
+  RegisterNvmAction action = 1;
+}
 
 message RegisterNvmResponse {}
