@@ -6,3 +6,25 @@ enum RegisterId {
   // reserved
   REGISTER_ID_UNSPECIFIED = 0;
 }
+
+/***************** Register API *****************/
+
+message RegisterWriteRequest {
+  RegisterId id = 1;
+  sint64 value = 2;
+}
+
+message RegisterWriteResponse {}
+
+message RegisterReadRequest {
+  RegisterId id = 1;
+}
+
+message RegisterReadResponse {
+  RegisterId id = 1;
+  sint64 value = 2;
+}
+
+message RegisterNvmRequest {}
+
+message RegisterNvmResponse {}

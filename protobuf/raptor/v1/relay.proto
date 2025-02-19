@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package raptor.v1;
 
-// relay states
 enum RelayId {
   // reserved
   RELAY_ID_UNSPECIFIED = 0;
@@ -15,7 +14,6 @@ enum RelayId {
   RELAY_ID_AUX = 3;
 }
 
-// relay states
 enum RelayState {
   // reserved
   RELAY_STATE_UNSPECIFIED = 0;
@@ -24,7 +22,6 @@ enum RelayState {
   RELAY_STATE_CLOSED = 2;
 }
 
-// relay commands
 enum RelayCommand {
   // reserved
   RELAY_COMMAND_UNSPECIFIED = 0;
@@ -37,3 +34,12 @@ message RelayTelemetry {
   // array of relay states indexed by RelayId
   repeated RelayState relay_states = 1;
 }
+
+/***************** Relay Control API *****************/
+
+message RelayControlRequest {
+  RelayId id = 1;
+  RelayCommand command = 2;
+}
+
+message RelayControlResponse {}

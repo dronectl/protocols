@@ -65,3 +65,25 @@ message ProfilePayload {
     ProfileModulationPiecewise piecewise = 6;
   }
 }
+
+/***************** Profile Management API *****************/
+
+message ProfileLoadRequest {
+  ProfilePayload profile = 1;
+}
+
+message ProfileLoadResponse {
+  uint32 id = 1;
+}
+
+message ProfileStartRequest {}
+
+message ProfileStartResponse {
+  uint32 id = 1;
+}
+
+message ProfileStopRequest {}
+
+message ProfileStopResponse {
+  uint32 id = 1;
+}

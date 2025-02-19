@@ -47,3 +47,25 @@ message DeviceAliveTelemetry {
   // battery telemetry
   BatteryTelemetry battery = 4;
 }
+
+/***************** Device API *****************/
+
+message DeviceMetadataRequest {}
+
+message DeviceMetadataResponse {
+  DeviceMetadata device = 1;
+}
+
+message DeviceAliveTelemetryRequest {}
+
+message DeviceAliveTelemetryResponse {
+  DeviceAliveTelemetry alive = 1;
+}
+
+message DeviceResetRequest {}
+
+message DeviceResetResponse {}
+
+message DeviceEstopRequest {}
+
+message DeviceEstopResponse {}
