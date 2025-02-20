@@ -4,5 +4,7 @@ managed:
 plugins:
   - remote: buf.build/community/nanopb:v0.4.9
     out: gen/c
-  - remote: buf.build/protocolbuffers/pyi:v29.3
+  - protoc_builtin: python
+    opt: 
+      - pyi_out=gen/python
     out: gen/python
