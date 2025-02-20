@@ -6,11 +6,18 @@ import "raptor/v1/battery.proto";
 import "raptor/v1/env.proto";
 import "raptor/v1/relay.proto";
 
-// semver version formatting
+// Version follows SemVer: https://semver.org
 message Version {
+  // semver major release
   uint32 major = 1;
+  // semver minor release
   uint32 minor = 2;
+  // semver patch release number
   uint32 patch = 3;
+  // version control SHA1 hash (where applicable)
+  string commit_sha = 4;
+  // true if release candidate; false otherwise
+  bool release_candidate = 5;
 }
 
 // device status states
